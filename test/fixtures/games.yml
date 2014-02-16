@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  creator_id: MyString
+  opponent_id: MyString
+  whose_turn: MyString
+  question: MyString
+  response: MyString
+  creator_answer: MyString
+  opponent_answer: MyString
+
+two:
+  creator_id: MyString
+  opponent_id: MyString
+  whose_turn: MyString
+  question: MyString
+  response: MyString
+  creator_answer: MyString
+  opponent_answer: MyString
