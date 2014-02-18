@@ -10,11 +10,13 @@ class GameController < ApplicationController
     friends = @graph.get_connections("me", "mutualfriends/#{params[:opponent_id]}")
     
     game = Game.new(
-      :creator_id => me["id"],
-      :opponent_id => params[:opponent_id],
-      :whose_turn => me["id"],
-      :question => "",
-      :response => "")
+      creator_id: me["id"],
+      opponent_id: params[:opponent_id],
+      whose_turn: me["id"],
+      question: "",
+      response: "",
+      turn_count: 0,
+      is_completed: false)
   
     answer = []
   
@@ -25,8 +27,21 @@ class GameController < ApplicationController
         game_id: game)
     end
   
+    celebrities = [
+      {name: "Eminem", fb_id: "45309870078", game_id: game.id},
+      {name: "Vin Diesel", fb_id: "89562268312", game_id: game.id},
+      {name: "Will Smith", fb_id: "92304305160", game_id: game.id},
+      {name: "Beyonce", fb_id: "28940545600", game_id: game.id},
+      {name: "Bob Marley", fb_id: "117533210756", game_id: game.id},
+      {name: "Jackie Chan", fb_id: "30382852317", game_id: game.id},
+      {name: "Jennifer Lopez", fb_id: "5170395767", game_id: game.id},
+      {name: "Eric Cartman", fb_id: "100005584694254", game_id: game.id},
+      {name: "Kobe Bryant", fb_id: "69025400418", game_id: game.id},
+      {name: "Emma Watson", fb_id: "140216402663925", game_id: game.id},
+    ]
+  
     (24 - friends.count).times do |i|
-      answer << Answer.create(name: "eminem", fb_id: "45309870078", game_id: game.id)
+      answer << Answer.create(celebrities[i%celebrities.length])
     end
   
     game.answers = answer
@@ -45,8 +60,14 @@ class GameController < ApplicationController
   def update
     game = Game.find(params[:id])
     
+    game.lastquestion = game.question
     game.question = params[:question]
     game.response = params[:response]
+    game.turn_count = game.turn_count + 1
+    
+    if(params[:is_completed])
+      game.is_completed = true
+    end
     
     if game.whose_turn.eql? game.creator_id
       game.whose_turn = game.opponent_id
@@ -68,7 +89,7 @@ class GameController < ApplicationController
   def index
     id = params[:user_id]
     if id
-      games = Game.where("creator_id = ? OR opponent_id = ?", id, id)
+      games = Game.where("(creator_id = ? AND is_completed = ?) OR (opponent_id = ? AND is_completed = ?)", id, false, id, false)
     else
       games = Game.all
     end
