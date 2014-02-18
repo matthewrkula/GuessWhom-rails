@@ -7,11 +7,14 @@ class GameController < ApplicationController
     
     @graph = Koala::Facebook::API.new(obj[:access_token])
     me = @graph.get_object("me")
+    them = @graph.get_object(params[:opponent_id])
     friends = @graph.get_connections("me", "mutualfriends/#{params[:opponent_id]}")
     
     game = Game.new(
       creator_id: me["id"],
+      creator_name: me["name"],
       opponent_id: params[:opponent_id],
+      opponent_name: them["name"],
       whose_turn: me["id"],
       question: "",
       response: "",
