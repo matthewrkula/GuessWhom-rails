@@ -22,7 +22,7 @@ class GameController < ApplicationController
       is_completed: false)
   
     answer = []
-  
+    friends = friends.shuffle
     [friends.count, 24].min.times do |i|
       answer << Answer.create(
         name: friends[i]["name"], 
@@ -45,6 +45,11 @@ class GameController < ApplicationController
   
     (24 - friends.count).times do |i|
       answer << Answer.create(celebrities[i%celebrities.length])
+    end
+  
+    answer = answer.shuffle
+    24.times do |i|
+      answer[i].position = i
     end
   
     game.answers = answer
@@ -98,7 +103,7 @@ class GameController < ApplicationController
     end
     
     respond_to do |format|
-      format.json {render :json => games.to_json(include: {answers: {only: [:fb_id, :name]}})}
+      format.json {render :json => games.to_json(include: {answers: {only: [:fb_id, :name, :position]}})}
     end
   end
 
