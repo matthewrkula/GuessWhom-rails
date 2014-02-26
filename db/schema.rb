@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140220202955) do
+ActiveRecord::Schema.define(version: 20140226055151) do
 
   create_table "answers", force: true do |t|
     t.string   "name"
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(version: 20140220202955) do
     t.string   "response"
     t.string   "lastquestion"
     t.integer  "turn_count"
-    t.boolean  "is_completed"
     t.string   "opponent_name"
     t.string   "creator_name"
+    t.string   "winner"
   end
 
 end

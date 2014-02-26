@@ -19,7 +19,7 @@ class GameController < ApplicationController
       question: "",
       response: "",
       turn_count: 0,
-      is_completed: false)
+      winner: "0")
   
     answer = []
     friends = friends.shuffle
@@ -73,8 +73,10 @@ class GameController < ApplicationController
     game.response = params[:response]
     game.turn_count = game.turn_count + 1
     
-    if(params[:is_completed])
-      game.is_completed = true
+    if(params[:winner])
+      if(params[:winner] != "0")
+        game.winner = params[:winner]
+      end
     end
     
     if game.whose_turn.eql? game.creator_id
@@ -92,12 +94,12 @@ class GameController < ApplicationController
     end
     
   end
-
   
   def index
     id = params[:user_id]
     if id
-      games = Game.where("(creator_id = ? AND is_completed = ?) OR (opponent_id = ? AND is_completed = ?)", id, false, id, false)
+#      games = Game.where("(creator_id = ? AND winner == ?) OR (opponent_id = ? AND winner == ?)", id, "0", id, "0")
+      games = Game.where("(creator_id = ?) OR (opponent_id = ?)", id, id)
     else
       games = Game.all
     end
