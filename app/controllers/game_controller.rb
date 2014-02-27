@@ -41,6 +41,12 @@ class GameController < ApplicationController
       {name: "Eric Cartman", fb_id: "100005584694254", game_id: game.id},
       {name: "Kobe Bryant", fb_id: "69025400418", game_id: game.id},
       {name: "Emma Watson", fb_id: "140216402663925", game_id: game.id},
+      {name: "Taylor Swift", fb_id: "19614945368", game_id: game.id},
+      {name: "Adele", fb_id: "9770929278", game_id: game.id},
+      {name: "Lil Wayne", fb_id: "6885814958", game_id: game.id},
+      {name: "Adam Sandler", fb_id: "9098498615", game_id: game.id},
+      {name: "Barack Obama", fb_id: "6815841748", game_id: game.id},
+      {name: "Snoop Dogg", fb_id: "11455644806", game_id: game.id}
     ]
   
     (24 - friends.count).times do |i|
