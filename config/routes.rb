@@ -3,6 +3,7 @@ GuessWhom::Application.routes.draw do
   get 'new_game' => 'game#new_game'
   get 'games' => 'game#index'
   get 'update/:id' => 'game#update'
+  get 'delete/:id' => 'game#delete'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

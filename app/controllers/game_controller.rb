@@ -98,7 +98,6 @@ class GameController < ApplicationController
   def index
     id = params[:user_id]
     if id
-#      games = Game.where("(creator_id = ? AND winner == ?) OR (opponent_id = ? AND winner == ?)", id, "0", id, "0")
       games = Game.where("(creator_id = ?) OR (opponent_id = ?)", id, id)
     else
       games = Game.all
@@ -109,4 +108,12 @@ class GameController < ApplicationController
     end
   end
 
+  def delete
+    Answer.where(game_id: params[:id]).destroy_all
+    Game.find(params[:id]).destroy
+    
+    respond_to do |format|
+      format.json {render json: {deleted: params[:id]}}
+    end
+  end
 end
