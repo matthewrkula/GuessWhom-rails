@@ -73,6 +73,7 @@ class GameController < ApplicationController
 
   def update
     game = Game.find(params[:id])
+    name = ""
     
     game.lastquestion = game.question
     game.question = params[:question]
@@ -87,13 +88,33 @@ class GameController < ApplicationController
     
     if game.whose_turn.eql? game.creator_id
       game.whose_turn = game.opponent_id
+      name = game.creator_name
     else
       game.whose_turn = game.creator_id
+      name = game.opponent_name
     end
     
     respond_to do |format|
       if game.save!
-        format.json {render :json => game}
+        
+        player = Player.find_by_fb_id(game.whose_turn)
+        if player && player.gcm_id
+          HTTParty.post("https://android.googleapis.com/gcm/send",
+            body: { 
+              data: {
+              "message" => "logging this mofucka",
+              "asker" => name,
+              "question" => game.question
+              }, 
+              registration_ids: [player.gcm_id]
+             }.to_json,
+            :headers => { 
+              "Authorization" => "key=AIzaSyDfkjPzRNkS5x5qWdws1WvQA04hfAeJrfI", 
+              "Content-Type" => "application/json"
+              })
+        end
+        
+        format.json {render :json => {game: game}}
       else
         format.json {render :json => {error: "Bad inputs"}}
       end
