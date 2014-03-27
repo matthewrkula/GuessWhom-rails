@@ -102,7 +102,7 @@ class GameController < ApplicationController
           HTTParty.post("https://android.googleapis.com/gcm/send",
             body: { 
               data: {
-              "message" => "logging this mofucka",
+              "message" => "Secret message",
               "asker" => name,
               "question" => game.question
               }, 
